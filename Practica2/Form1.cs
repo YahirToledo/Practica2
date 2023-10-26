@@ -5,58 +5,67 @@ namespace Practica2
 {
     public partial class Form1 : Form
     {
-        private float[,] A;
-        private float[] B;
-        private float[] x;
+        #region Atributos
+        private float[,] matrizCoef; //Matriz de coeficientes
+        private float[] matrizCte; //Matriz de constantes
+        private float[] matrizInicio; //Matriz 0 con el que se inicia a iterar
+        #endregion
+
+        #region Constructor
         public Form1()
         {
             InitializeComponent();
-            A = new float[3, 3];
-            B = new float[3];
-            x = new float[3];
-            x[0] = 0;
-            x[1] = 0;
-            x[2] = 0;
+            matrizCoef = new float[3, 3];
+            matrizCte = new float[3];
+            matrizInicio = new float[3];
+            matrizInicio[0] = 0;
+            matrizInicio[1] = 0;
+            matrizInicio[2] = 0;
         }
-        private float[,] LeerA()
-        {
-            A[0, 0] = float.Parse(txtbA11.Text);
-            A[0, 1] = float.Parse(txtbA12.Text);
-            A[0, 2] = float.Parse(txtbA13.Text);
-            A[1, 0] = float.Parse(txtbA21.Text);
-            A[1, 1] = float.Parse(txtbA22.Text);
-            A[1, 2] = float.Parse(txtbA23.Text);
-            A[2, 0] = float.Parse(txtbA31.Text);
-            A[2, 1] = float.Parse(txtbA32.Text);
-            A[2, 2] = float.Parse(txtbA33.Text);
-            return A;
-        }
-        private float[] LeerB()
-        {
-            B[0] = float.Parse(txtbB1.Text);
-            B[1] = float.Parse(txtbB2.Text);
-            B[2] = float.Parse(txtbB3.Text);
-            return B;
-        }
+        #endregion
 
+        #region Metodos
+        private float[,] LeerMatrizCoef()
+        {
+            matrizCoef[0, 0] = float.Parse(txtbA11.Text);
+            matrizCoef[0, 1] = float.Parse(txtbA12.Text);
+            matrizCoef[0, 2] = float.Parse(txtbA13.Text);
+            matrizCoef[1, 0] = float.Parse(txtbA21.Text);
+            matrizCoef[1, 1] = float.Parse(txtbA22.Text);
+            matrizCoef[1, 2] = float.Parse(txtbA23.Text);
+            matrizCoef[2, 0] = float.Parse(txtbA31.Text);
+            matrizCoef[2, 1] = float.Parse(txtbA32.Text);
+            matrizCoef[2, 2] = float.Parse(txtbA33.Text);
+            return matrizCoef;
+        }
+        private float[] LeerMatrizCte()
+        {
+            matrizCte[0] = float.Parse(txtbB1.Text);
+            matrizCte[1] = float.Parse(txtbB2.Text);
+            matrizCte[2] = float.Parse(txtbB3.Text);
+            return matrizCte;
+        }
+        #endregion
+
+        #region Eventos
         private void btnResolver_Click(object sender, EventArgs e)
         {
             try
             {
-                LeerA();
-                LeerB();
+                LeerMatrizCoef();
+                LeerMatrizCte();
                 // Un if para confirmar la convergencia
-                if (Math.Abs(A[0, 0]) > Math.Abs(A[0, 1] + A[0, 2]) && Math.Abs(A[1, 1]) > Math.Abs(A[1, 0] + A[1, 2]) && Math.Abs(A[2, 2]) > Math.Abs(A[2, 0] + A[2, 1]))
+                if (Math.Abs(matrizCoef[0, 0]) > Math.Abs(matrizCoef[0, 1] + matrizCoef[0, 2]) && Math.Abs(matrizCoef[1, 1]) > Math.Abs(matrizCoef[1, 0] + matrizCoef[1, 2]) && Math.Abs(matrizCoef[2, 2]) > Math.Abs(matrizCoef[2, 0] + matrizCoef[2, 1]))
                 {
                     for (int i = 0; i < 100; i++)
                     {
-                        x[0] = (1 / A[0, 0]) * (B[0] - A[0, 1] * x[1] - A[0, 2] * x[2]);
-                        x[1] = (1 / A[1, 1]) * (B[1] - A[1, 0] * x[0] - A[1, 2] * x[2]);
-                        x[2] = (1 / A[2, 2]) * (B[2] - A[2, 0] * x[0] - A[2, 1] * x[1]);
+                        matrizInicio[0] = (1 / matrizCoef[0, 0]) * (matrizCte[0] - matrizCoef[0, 1] * matrizInicio[1] - matrizCoef[0, 2] * matrizInicio[2]);
+                        matrizInicio[1] = (1 / matrizCoef[1, 1]) * (matrizCte[1] - matrizCoef[1, 0] * matrizInicio[0] - matrizCoef[1, 2] * matrizInicio[2]);
+                        matrizInicio[2] = (1 / matrizCoef[2, 2]) * (matrizCte[2] - matrizCoef[2, 0] * matrizInicio[0] - matrizCoef[2, 1] * matrizInicio[1]);
                     }
-                    lbxRespuesta.Text = "x = " + x[0].ToString();
-                    lbyRespuesta.Text = "y = " + x[1].ToString();
-                    lbzRespuesta.Text = "z = " + x[2].ToString();
+                    lbxRespuesta.Text = "x = " + matrizInicio[0].ToString();
+                    lbyRespuesta.Text = "y = " + matrizInicio[1].ToString();
+                    lbzRespuesta.Text = "z = " + matrizInicio[2].ToString();
                 }
                 else
                 {
@@ -69,5 +78,6 @@ namespace Practica2
             }
             
         }
+        #endregion
     }
 }
